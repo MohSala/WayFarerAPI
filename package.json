@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon --exec babel-node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha build/tests --exit",
+    "build": "babel server --out-dir build",
     "create": "node db createTables"
   },
   "repository": {
@@ -21,9 +22,12 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "make-runnable": "^1.3.6",
+    "mocha": "^6.1.4",
     "pg": "^7.11.0"
   },
   "devDependencies": {
