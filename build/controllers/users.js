@@ -169,78 +169,81 @@ function () {
           error: 'Password must be minimum of 6 characters'
         });
       }
-    } // static signin(req, res) {
-    //   const { email, password } = req.body;
-    //   const user = { email, password };
-    //   let position = 0;
-    //   if (user.email === undefined || user.email === '') {
-    //     res.status(400).json({
-    //       status: 400,
-    //       error: 'Email not supplied',
-    //     });
-    //     return;
-    //   }
-    //   if (user.password === undefined || user.password === '') {
-    //     res.status(400).json({
-    //       status: 400,
-    //       error: 'Password not supplied',
-    //     });
-    //     return;
-    //   }
-    //   // Query User Record for credentials
-    //   pool.connect((err, client, done) => {
-    //     if (err) {
-    //       console.log(err);
-    //     }
-    //     client.query('SELECT id, email, firstName, lastName, password, hash FROM users', (err, result) => {
-    //       if (err) {
-    //         console.log(err);
-    //       }
-    //       console.log(result.rows);
-    //       const contain = result.rows.map(val => val.email).map(val => val.trim());
-    //       if (contain.includes(user.email)) {
-    //         position = contain.indexOf(user.email);
-    //       }
-    //       console.log(position);
-    //       console.log(result.rows[position].email);
-    //       const newUser = result.rows[position];
-    //       console.log(newUser);
-    //       if (user.email === newUser.email.trim()) {
-    //         if (user.password === newUser.password.trim()) {
-    //           // bcrypt.compare(user.password, newUser.hash)
-    //           // .then((result) => {
-    //           // if (result) {
-    //           delete newUser.password;
-    //           const token = jwt.sign({ newUser }, 'secretKey', { expiresIn: '5min' });
-    //           res.status(200).json({
-    //             status: 200,
-    //             data: {
-    //               token,
-    //               id: newUser.id,
-    //               firstName: newUser.firstName,
-    //               lastName: newUser.lastName,
-    //               email: newUser.email,
-    //             },
-    //           });
-    //           // }
-    //           // });
-    //         } else {
-    //           res.status(400).json({
-    //             status: 400,
-    //             error: 'Invalid password',
-    //           });
-    //         }
-    //       } else {
-    //         res.status(400).json({
-    //           status: 400,
-    //           error: 'Invalid email',
-    //         });
-    //       }
-    //       done();
-    //     });
-    //   });
-    // }
+    }
+  }, {
+    key: "signin",
+    value: function signin(req, res) {
+      var _req$body2 = req.body,
+          email = _req$body2.email,
+          password = _req$body2.password;
+      var user = {
+        email: email,
+        password: password
+      };
+      var position = 0;
 
+      if (user.email === undefined || user.email === '') {
+        res.status(400).json({
+          status: 400,
+          error: 'Email not supplied'
+        });
+        return;
+      }
+
+      if (user.password === undefined || user.password === '') {
+        res.status(400).json({
+          status: 400,
+          error: 'Password not supplied'
+        });
+        return;
+      } // Query User Record for credentials
+
+
+      pool.connect(function (err, client, done) {
+        var query = 'SELECT * FROM users where email=$1';
+        var values = [user.email];
+        client.query(query, values, function (error, result) {
+          done();
+
+          if (error) {
+            res.status(400).json({
+              error: error
+            });
+          }
+
+          if (result.rows == 0) {
+            res.status(400).json({
+              "status": "Failure",
+              "message": "No User Found"
+            });
+          } else {
+            _bcrypt["default"].compare(user.password, result.rows[0].password).then(function (result) {
+              if (result == true) {
+                var payload = {
+                  id: result.id,
+                  first_name: result.first_name,
+                  last_name: result.last_name
+                };
+
+                _jsonwebtoken["default"].sign(payload, 'secret', {
+                  expiresIn: 3600
+                }, function (err, token) {
+                  res.status(200).send({
+                    status: 200,
+                    data: 'Bearer ' + token
+                  });
+                });
+              } else {
+                res.status(400).send({
+                  status: 'Failure',
+                  result: 'Invalid Credentials'
+                });
+              }
+            });
+          }
+        });
+      });
+    }
   }]);
   return UserController;
 }(); //   module.exports = router;

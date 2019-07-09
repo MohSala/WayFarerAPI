@@ -120,97 +120,89 @@ describe('Signup Endpoint Error Handling', function () {
     });
 
     done();
-  }); // SIGN-IN ENDPOINTS
-  // describe('Signin Endpoint', () => {
-  //   it('User signin method should exist', () => {
-  //     UserController.signin.should.exist;
-  //   });
-  //   it('Signin(POST) should sign in user', (done) => {
-  //     chai.request(server)
-  //       .post('/api/v1/auth/signin')
-  //       .send({
-  //         email: 'dami@gmail.com',
-  //         password: '123456',
-  //       })
-  //       .end((err, res) => {
-  //         res.should.have.status(200);
-  //         res.should.be.json;
-  //         res.body.should.be.a('object');
-  //         res.body.should.have.property('status');
-  //         res.body.status.should.equal(200);
-  //         res.body.should.have.property('data');
-  //         res.body.data.should.be.a('object');
-  //       });
-  //     done();
-  //   });
-  // });
-  // describe('Signin Endpoint Error Handling', () => {
-  //   it('should return an ERROR if EMAIL is not supplied', (done) => {
-  //     chai.request(server)
-  //       .post('/api/v1/auth/signin')
-  //       .send({
-  //         // email: 'dami@gmail.com',
-  //         password: '123456',
-  //       })
-  //       .end((err, res) => {
-  //         res.should.have.status(400);
-  //         res.should.be.json;
-  //         res.body.should.be.a('object');
-  //         res.body.should.have.property('status');
-  //         res.body.status.should.equal(400);
-  //         res.body.should.have.property('error');
-  //       });
-  //     done();
-  //   });
-  //   it('should return an ERROR if PASSWORD is not supplied', (done) => {
-  //     chai.request(server)
-  //       .post('/api/v1/auth/signin')
-  //       .send({
-  //         email: 'dami@gmail.com',
-  //         // password: '123456',
-  //       })
-  //       .end((err, res) => {
-  //         res.should.have.status(400);
-  //         res.should.be.json;
-  //         res.body.should.be.a('object');
-  //         res.body.should.have.property('status');
-  //         res.body.status.should.equal(400);
-  //         res.body.should.have.property('error');
-  //       });
-  //     done();
-  //   });
-  //   it('should return an ERROR if EMAIL is not INVALID', (done) => {
-  //     chai.request(server)
-  //       .post('/api/v1/auth/signin')
-  //       .send({
-  //         email: 'dami@gmail',
-  //         password: '123456',
-  //       })
-  //       .end((err, res) => {
-  //         res.should.have.status(400);
-  //         res.should.be.json;
-  //         res.body.should.be.a('object');
-  //         res.body.should.have.property('status');
-  //         res.body.status.should.equal(400);
-  //         res.body.should.have.property('error');
-  //       });
-  //     done();
-  //   });
-  //   it('should return an ERROR if PASSWORD is invalid', (done) => {
-  //     chai.request(server)
-  //       .post('/api/v1/auth/signin')
-  //       .send({
-  //         email: 'dami@gmail.com',
-  //         password: '1234',
-  //       })
-  //       .end((err, res) => {
-  //         res.should.have.status(400);
-  //         res.should.be.json;
-  //         res.body.should.be.a('object');
-  //         res.body.should.have.property('status');
-  //         res.body.status.should.equal(400);
-  //         res.body.should.have.property('error');
-  //       });
-  //     done();
-  //   });
+  });
+}); // SIGN-IN ENDPOINTS
+
+describe('Signin Endpoint', function () {
+  it('User signin method should exist', function () {
+    _users["default"].signin.should.exist;
+  });
+  it('Signin(POST) should sign in user', function (done) {
+    _chai["default"].request(_server["default"]).post('/api/v1/auth/signin').send({
+      email: 'dami@gmail.com',
+      password: '123456'
+    }).end(function (err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.equal(200);
+      res.body.should.have.property('data');
+      res.body.data.should.be.a('object');
+    });
+
+    done();
+  });
+});
+describe('Signin Endpoint Error Handling', function () {
+  it('should return an ERROR if EMAIL is not supplied', function (done) {
+    _chai["default"].request(_server["default"]).post('/api/v1/auth/signin').send({
+      // email: 'dami@gmail.com',
+      password: '123456'
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.equal(400);
+      res.body.should.have.property('error');
+    });
+
+    done();
+  });
+  it('should return an ERROR if PASSWORD is not supplied', function (done) {
+    _chai["default"].request(_server["default"]).post('/api/v1/auth/signin').send({
+      email: 'dami@gmail.com' // password: '123456',
+
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.equal(400);
+      res.body.should.have.property('error');
+    });
+
+    done();
+  });
+  it('should return an ERROR if EMAIL is not INVALID', function (done) {
+    _chai["default"].request(_server["default"]).post('/api/v1/auth/signin').send({
+      email: 'dami@gmail',
+      password: '123456'
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.equal(400);
+      res.body.should.have.property('error');
+    });
+
+    done();
+  });
+  it('should return an ERROR if PASSWORD is invalid', function (done) {
+    _chai["default"].request(_server["default"]).post('/api/v1/auth/signin').send({
+      email: 'dami@gmail.com',
+      password: '1234'
+    }).end(function (err, res) {
+      res.should.have.status(400);
+      res.should.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('status');
+      res.body.status.should.equal(400);
+      res.body.should.have.property('error');
+    });
+
+    done();
+  });
 });

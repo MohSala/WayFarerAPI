@@ -13,7 +13,7 @@ var _users = _interopRequireDefault(require("../controllers/users"));
 
 var router = _express["default"].Router();
 
-router.post('/signup', _users["default"].signup); // router.post('/signin', UserController.signin);
-
+router.post('/signup', _users["default"].signup);
+router.post('/signin', _users["default"].signin);
 var _default = router;
 exports["default"] = _default;

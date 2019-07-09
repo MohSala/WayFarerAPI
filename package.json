@@ -4,7 +4,7 @@
   "description": "Bus Booking Application",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon --exec babel-node server.js",
+    "dev": "nodemon --exec babel-node server/server.js",
     "test": "mocha build/tests --exit",
     "build": "babel server --out-dir build",
     "create": "node db createTables"
