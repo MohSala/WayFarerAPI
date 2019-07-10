@@ -13,7 +13,7 @@ var _trips = _interopRequireDefault(require("../controllers/trips"));
 
 var router = _express["default"].Router();
 
-router.get('/getTrips', _trips["default"].getTrips); // router.post('/createTrip', TripController.createTrip);
-
+router.get('/getTrips', _trips["default"].getTrips);
+router.post('/createTrip', _trips["default"].createTrip);
 var _default = router;
 exports["default"] = _default;

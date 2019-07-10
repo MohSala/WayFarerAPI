@@ -5,6 +5,6 @@ const router = express.Router();
 
 
 router.get('/getTrips', TripController.getTrips);
-// router.post('/createTrip', TripController.createTrip);
+router.post('/createTrip', TripController.createTrip);
 
 export default router;
