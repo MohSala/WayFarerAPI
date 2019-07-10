@@ -18,17 +18,39 @@ pool.on('connect', () => {
   console.log('connected to the Database');
 });
 
-const createTables = () => {
-  const userTable = `CREATE TABLE IF NOT EXISTS
-      users(
+// const createTables = () => {
+//   const userTable = `CREATE TABLE IF NOT EXISTS
+//       users(
+//         id SERIAL PRIMARY KEY,
+//         email VARCHAR(128) NOT NULL,
+//         first_name VARCHAR(128) NOT NULL,
+//         last_name VARCHAR(128) NOT NULL,
+//         password VARCHAR(128) NOT NULL,
+//         is_admin VARCHAR(128) NOT NULL
+//       )`;
+//   pool.query(userTable)
+//     .then((res) => {
+//       console.log(res);
+//       pool.end();
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       pool.end();
+//     });
+// };
+
+const createTrips = () => {
+  const tripsTable = `CREATE TABLE IF NOT EXISTS
+      trips(
         id SERIAL PRIMARY KEY,
-        email VARCHAR(128) NOT NULL,
-        first_name VARCHAR(128) NOT NULL,
-        last_name VARCHAR(128) NOT NULL,
-        password VARCHAR(128) NOT NULL,
-        is_admin VARCHAR(128) NOT NULL
+        bus_id INT NOT NULL,
+        origin VARCHAR(128) NOT NULL,
+        destination VARCHAR(128) NOT NULL,
+        trip_date TIMESTAMP NOT NULL,
+        fare FLOAT NOT NULL,
+        status FLOAT NOT NULL
       )`;
-  pool.query(userTable)
+  pool.query(tripsTable)
     .then((res) => {
       console.log(res);
       pool.end();
@@ -38,9 +60,9 @@ const createTables = () => {
       pool.end();
     });
 };
-
 module.exports = {
-  createTables,
+  // createTables,
+  createTrips,
   pool,
 };
 

@@ -9,11 +9,11 @@ exports["default"] = void 0;
 
 var _express = _interopRequireDefault(require("express"));
 
-var _users = _interopRequireDefault(require("../controllers/users"));
+var _trips = _interopRequireDefault(require("../controllers/trips"));
 
 var router = _express["default"].Router();
 
-router.post('/signup', _users["default"].signup);
-router.post('/signin', _users["default"].signin);
+router.get('/getTrips', _trips["default"].getTrips);
+router.post('/createTrip', _trips["default"].createTrip);
 var _default = router;
 exports["default"] = _default;
