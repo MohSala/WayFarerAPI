@@ -5,6 +5,35 @@ import Bus from "../models/buses";
 const pool = new pg.Pool(config);
 
 class BusController {
+  static viewBus(req, res) {
+    pool.connect((err, client, done) => {
+      if (err) {
+        console.log(err);
+      }
+
+      const query = "SELECT * FROM buses";
+      client.query(query, (error, result) => {
+        if (error) {
+          return res.status(401).json({
+            status: "Error",
+            error: "No token provided"
+          });
+        }
+        if (result.rows < 1) {
+          res.status(200).json({
+            status: "Success",
+            message: "No Buses found"
+          });
+        }
+        return res.status(200).json({
+          status: "Success",
+          data: result.rows
+        });
+        done();
+      });
+    });
+  }
+
   static createBus(req, res) {
     const { number_plate, manufacturer, model, year, capacity } = req.body;
 
