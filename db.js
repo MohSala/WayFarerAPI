@@ -1,21 +1,18 @@
-const pg = require ('pg');
-
+const pg = require("pg");
 
 const config = {
-
-    user: 'wayfarer', //this is the db user credential
-    database: 'wayfarerdb',
-    password: 'wayfarer',
-    port: 5432,
-    max: 10, // max number of clients in the pool
-    idleTimeoutMillis: 30000
-
-}
+  user: "wayfarer", //this is the db user credential
+  database: "wayfarerdb",
+  password: "wayfarer",
+  port: 5432,
+  max: 10, // max number of clients in the pool
+  idleTimeoutMillis: 30000
+};
 
 const pool = new pg.Pool(config);
 
-pool.on('connect', () => {
-  console.log('connected to the Database');
+pool.on("connect", () => {
+  console.log("connected to the Database");
 });
 
 // const createTables = () => {
@@ -43,29 +40,54 @@ const createTrips = () => {
   const tripsTable = `CREATE TABLE IF NOT EXISTS
       trips(
         id SERIAL PRIMARY KEY,
-        bus_id INT NOT NULL,
+        bus_id INT NOT NULL REFERENCES buses(id),
         origin VARCHAR(128) NOT NULL,
         destination VARCHAR(128) NOT NULL,
         trip_date TIMESTAMP NOT NULL,
         fare FLOAT NOT NULL,
         status FLOAT NOT NULL
       )`;
-  pool.query(tripsTable)
-    .then((res) => {
+  pool
+    .query(tripsTable)
+    .then(res => {
       console.log(res);
       pool.end();
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
       pool.end();
     });
 };
-module.exports = {
-  // createTables,
-  createTrips,
-  pool,
+
+const createBuses = () => {
+  const busesTable = `CREATE TABLE IF NOT EXISTS
+      buses(
+        id SERIAL PRIMARY KEY,
+        number_plate VARCHAR(128) NOT NULL,
+        manufacturer VARCHAR(128) NOT NULL,
+        model VARCHAR(128) NOT NULL,
+        year VARCHAR(128) NOT NULL,
+        capacity INT NOT NULL
+        
+      )`;
+  pool
+    .query(busesTable)
+    .then(res => {
+      console.log(res);
+      pool.end();
+    })
+    .catch(err => {
+      console.log(err);
+      pool.end();
+    });
 };
 
-require('make-runnable');
+module.exports = {
+  createTrips,
+  createBuses,
+  pool
+};
+
+require("make-runnable");
 
 module.exports = config;
