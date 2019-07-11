@@ -118,7 +118,7 @@ function () {
 
           if (error) {
             res.status(400).json({
-              status: 'Error',
+              status: "Error",
               error: "Not all credentials filled"
             });
           }

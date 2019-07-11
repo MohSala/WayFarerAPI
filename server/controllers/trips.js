@@ -99,10 +99,10 @@ class TripController {
       client.query(query, values, (error, result) => {
         done();
         if (error) {
-          res.status(400).json({ 
-            status: 'Error',  
-            error: "Not all credentials filled" 
-            });
+          res.status(400).json({
+            status: "Error",
+            error: "Not all credentials filled"
+          });
         }
         res.status(201).send({
           status: "Successful",
@@ -111,7 +111,6 @@ class TripController {
       });
     });
   }
-
 }
 
 export default TripController;
