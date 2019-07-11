@@ -17,6 +17,76 @@ describe("Bus Controller", () => {
   });
 });
 
+//
+describe("Get Buses endpoint", () => {
+  it("Get Bus method should exist", () => {
+    BusController.viewBus.should.exist;
+  });
+
+  it("Get Buses should return list of Buses", done => {
+    const user = {
+      first_name: "Tobi",
+      last_name: "Qwerty",
+      email: "tobi@123.com"
+    };
+    const token = jwt.sign(user, "secretKey", { expiresIn: 3000 });
+    const data = {
+      token: `${token}`
+    };
+
+    chai
+      .request(server)
+      .get("/api/v1/buses", middleware.checkToken)
+      .send(data)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a("object");
+        res.body.should.have.property("status");
+        res.body.status.should.equal("Success");
+        res.body.should.have.property("data");
+        res.body.data.should.be.a("object");
+      });
+    done();
+  });
+});
+
+describe("Get Buses Endpoint Error Handling", () => {
+  it("should return an ERROR if Token is not supplied", done => {
+    chai
+      .request(server)
+      .get("/api/v1/buses")
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.should.be.json;
+        res.body.should.be.a("object");
+        res.body.should.have.property("status");
+        res.body.status.should.equal(401);
+        res.body.should.have.property("error");
+      });
+    done();
+  });
+
+  it("should return an ERROR if Token is invalid", done => {
+    const data = {
+      token: `fakeToken`
+    };
+    chai
+      .request(server)
+      .get("/api/v1/buses", middleware.checkToken)
+      .send(data)
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.should.be.json;
+        res.body.should.be.a("object");
+        res.body.should.have.property("status");
+        res.body.status.should.equal(401);
+        res.body.should.have.property("error");
+      });
+    done();
+  });
+});
+
 //Create bus endpoints
 describe("Create Bus endpoint", () => {
   it("Create Bus method should exist", () => {
