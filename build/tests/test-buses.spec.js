@@ -26,7 +26,71 @@ describe("Bus Controller", function () {
   it("Bus Controller should exist", function () {
     _buses["default"].should.exist;
   });
+}); //
+
+describe("Get Buses endpoint", function () {
+  it("Get Bus method should exist", function () {
+    _buses["default"].viewBus.should.exist;
+  });
+  it("Get Buses should return list of Buses", function (done) {
+    var user = {
+      first_name: "Tobi",
+      last_name: "Qwerty",
+      email: "tobi@123.com"
+    };
+
+    var token = _jsonwebtoken["default"].sign(user, "secretKey", {
+      expiresIn: 3000
+    });
+
+    var data = {
+      token: "".concat(token)
+    };
+
+    _chai["default"].request(_server["default"]).get("/api/v1/buses", _middleware["default"].checkToken).send(data).end(function (err, res) {
+      res.should.have.status(200);
+      res.should.be.json;
+      res.body.should.be.a("object");
+      res.body.should.have.property("status");
+      res.body.status.should.equal("Success");
+      res.body.should.have.property("data");
+      res.body.data.should.be.a("object");
+    });
+
+    done();
+  });
 });
+describe("Get Buses Endpoint Error Handling", function () {
+  it("should return an ERROR if Token is not supplied", function (done) {
+    _chai["default"].request(_server["default"]).get("/api/v1/buses").end(function (err, res) {
+      res.should.have.status(401);
+      res.should.be.json;
+      res.body.should.be.a("object");
+      res.body.should.have.property("status");
+      res.body.status.should.equal(401);
+      res.body.should.have.property("error");
+    });
+
+    done();
+  });
+  it("should return an ERROR if Token is invalid", function (done) {
+    var data = {
+      token: "fakeToken"
+    };
+
+    _chai["default"].request(_server["default"]).get("/api/v1/buses", _middleware["default"].checkToken).send(data).end(function (err, res) {
+      res.should.have.status(401);
+      res.should.be.json;
+      res.body.should.be.a("object");
+      res.body.should.have.property("status");
+      res.body.status.should.equal(401);
+      res.body.should.have.property("error");
+    });
+
+    done();
+  });
+}); //Create bus endpoints
+
 describe("Create Bus endpoint", function () {
   it("Create Bus method should exist", function () {
     _buses["default"].createBus.should.exist;

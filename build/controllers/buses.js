@@ -27,6 +27,38 @@ function () {
   }
 
   (0, _createClass2["default"])(BusController, null, [{
+    key: "viewBus",
+    value: function viewBus(req, res) {
+      pool.connect(function (err, client, done) {
+        if (err) {
+          console.log(err);
+        }
+
+        var query = "SELECT * FROM buses";
+        client.query(query, function (error, result) {
+          if (error) {
+            return res.status(401).json({
+              status: "Error",
+              error: "No token provided"
+            });
+          }
+
+          if (result.rows < 1) {
+            res.status(200).json({
+              status: "Success",
+              message: "No Buses found"
+            });
+          }
+
+          return res.status(200).json({
+            status: "Success",
+            data: result.rows
+          });
+          done();
+        });
+      });
+    }
+  }, {
     key: "createBus",
     value: function createBus(req, res) {
       var _req$body = req.body,
