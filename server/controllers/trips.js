@@ -129,6 +129,47 @@ class TripController {
       });
     });
   }
+
+  static cancelTrip(req, res) {
+    pool.connect((err, client, done) => {
+      const query = "SELECT is_admin from users where id=$1";
+      const values = [req.body.id];
+
+      client.query(query, values, (error, result) => {
+        if (error) {
+          res.status(400).json({
+            status: "Error",
+            error: "Something went wrong"
+          });
+        }
+
+        if (result.rows[0].is_admin === "true") {
+          const cancelQuery = `UPDATE trips
+          SET status=$1
+          WHERE id=$2 returning *`;
+          const val = ["0", req.params.trip_id];
+
+          client.query(cancelQuery, val, (error, result) => {
+            if (result.rows[0] <= 0) {
+              return res.status(404).json({
+                status: "error",
+                error: "No trip found with such ID"
+              });
+            }
+            return res.status(200).json({
+              status: "success",
+              data: result.rows[0]
+            });
+          });
+        } else {
+          res.status(400).json({
+            status: "error",
+            error: "You do not have the priviledges"
+          });
+        }
+      });
+    });
+  }
 }
 
 export default TripController;
