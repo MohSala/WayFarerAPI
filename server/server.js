@@ -4,6 +4,7 @@ import users from "./routers/users";
 import middleware from "./middleware";
 import trips from "./routers/trips";
 import buses from "./routers/buses";
+import bookings from "./routers/bookings";
 
 const app = express();
 const router = express.Router();
@@ -21,6 +22,7 @@ app.get("/", middleware.checkToken, (req, res) =>
 app.use("/api/v1/auth/", users);
 app.use("/api/v1/trips/", middleware.checkToken, trips);
 app.use("/api/v1/", middleware.checkToken, buses);
+app.use("/api/v1/", middleware.checkToken, bookings);
 
 app.listen(port, () => {
   console.log(`Server is running on PORT ${port}`);
