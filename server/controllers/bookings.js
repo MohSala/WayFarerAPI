@@ -236,9 +236,9 @@ class BookingsController {
       }
 
       const query =
-        "DELETE FROM bookings where user_id=$1 and booking_id=$2 returning *";
+        "DELETE FROM bookings where user_id=$1 and id=$2 returning *";
 
-      const val = [req.body.user_id, req.params.booking_id];
+      const val = [req.body.user_id, req.params.id];
       client.query(query, val, (error, result) => {
         if (error) {
           return res.status(400).json({
@@ -259,6 +259,69 @@ class BookingsController {
           }
         });
         done();
+      });
+    });
+  }
+
+  static changeSeat(req, res) {
+    pool.connect((err, client, done) => {
+      if (err) {
+        res.status(400).json({
+          status: "Error",
+          error: "Something went wrong"
+        });
+      }
+
+      const query =
+        "SELECT * from bookings where trip_id=$1 AND seat_number=$2";
+      const value = [req.body.trip_id, req.body.seat_number];
+
+      client.query(query, value, (error, result) => {
+        if (result.rows[0]) {
+          return res.status(400).json({
+            status: "error",
+            error: "That seat has already been taken, choose another"
+          });
+        }
+      });
+
+      const secondQuery = "SELECT * FROM trips where id =$1";
+      const secondValue = [req.body.trip_id];
+      client.query(secondQuery, secondValue, (error, result) => {
+        if (!result.rows[0]) {
+          return res.status(404).json({
+            status: "error",
+            error: "Trip not found!"
+          });
+        }
+      });
+
+      const fourthQuery = "Select * from Buses where id=$1";
+      const fourthValue = [req.body.bus_id];
+
+      client.query(fourthQuery, fourthValue, (error, result) => {
+        if (result.rows[0].capacity < req.body.seat_number) {
+          return res.status(400).json({
+            status: "error",
+            error: "The Bus does not have that amount of capacity"
+          });
+        }
+      });
+
+      const updateQuery = "UPDATE bookings SET seat_number = $1  returning *";
+      const updateValue = [req.body.seat_number];
+      client.query(updateQuery, updateValue, (error, result) => {
+        console.log(result.rows[0]);
+        if (!result.rows[0]) {
+          return res.status(404).json({
+            status: "error",
+            error: "Not Found"
+          });
+        }
+        return res.status(200).json({
+          status: "success",
+          data: result.rows[0]
+        });
       });
     });
   }
