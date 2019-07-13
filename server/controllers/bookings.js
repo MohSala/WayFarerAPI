@@ -6,6 +6,62 @@ const pool = new pg.Pool(config);
 
 class BookingsController {
   /**
+   * Users can view all their trips
+   * @param {*} req
+   * @param {*} res
+   */
+
+  static viewBookings(req, res) {
+    pool.connect((err, client, done) => {
+      if (err) {
+        console.log(err);
+      }
+      const firstQuery = "SELECT is_admin from users where id=$1";
+      const value = [req.body.user_id];
+      client.query(firstQuery, value, (error, result) => {
+        if (result.rows[0].is_admin === "true") {
+          const secondQuery = "SELECT * from bookings";
+          client.query(secondQuery, (error, result) => {
+            if (error) {
+              return res.status(400).json({
+                status: "error",
+                error: "Sorry something went wrong"
+              });
+            }
+            res.status(200).json({
+              status: "Success",
+              data: result.rows
+            });
+          });
+        } else {
+          const query = "SELECT * FROM bookings where user_id=$1";
+          const values = [req.body.user_id];
+          client.query(query, values, (error, result) => {
+            console.log(result.rows[0]);
+            if (error) {
+              return res.status(400).json({
+                status: "error",
+                error: "Something went wrong"
+              });
+            }
+            if (result.rows < 1) {
+              res.status(200).json({
+                status: "Success",
+                message: "No trip has been booked for this user"
+              });
+            }
+            return res.status(200).json({
+              status: "Success",
+              data: result.rows
+            });
+            done();
+          });
+        }
+      });
+    });
+  }
+
+  /**
    * Users can book a seat for a trip
    * @param {*} req
    * @param {*} res
