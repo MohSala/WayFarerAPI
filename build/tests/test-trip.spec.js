@@ -44,21 +44,15 @@ describe("Get Trips endpoint", function () {
     });
 
     var data = {
-      bus_id: "2",
-      origin: "Accre",
-      destination: "Lagos",
-      trip_date: "2019-01-01",
-      fare: "40000",
-      status: "1",
       token: "".concat(token)
     };
 
-    _chai["default"].request(_server["default"]).get("/api/v1/trips/getTrips", _middleware["default"].checkToken).send(data).end(function (err, res) {
-      res.should.have.status(201);
+    _chai["default"].request(_server["default"]).get("/api/v1/trips", _middleware["default"].checkToken).send(data).end(function (err, res) {
+      res.should.have.status(200);
       res.should.be.json;
       res.body.should.be.a("object");
       res.body.should.have.property("status");
-      res.body.status.should.equal(201);
+      res.body.status.should.equal(200);
       res.body.should.have.property("data");
       res.body.data.should.be.a("object");
     });
@@ -68,10 +62,9 @@ describe("Get Trips endpoint", function () {
 });
 describe("Get trips Endpoint Error Handling", function () {
   it("should return an ERROR if Token is not supplied", function (done) {
-    _chai["default"].request(_server["default"]).get("/api/v1/trips/getTrips").end(function (err, res) {
+    _chai["default"].request(_server["default"]).get("/api/v1/trips").end(function (err, res) {
       res.should.have.status(401);
       res.should.be.json;
-      res.body.should.be.a("object");
       res.body.should.have.property("status");
       res.body.status.should.equal(401);
       res.body.should.have.property("error");
@@ -90,10 +83,9 @@ describe("Get trips Endpoint Error Handling", function () {
       token: "fakeToken"
     };
 
-    _chai["default"].request(_server["default"]).get("/api/v1/trips/getTrips", _middleware["default"].checkToken).send(data).end(function (err, res) {
+    _chai["default"].request(_server["default"]).get("/api/v1/trips", _middleware["default"].checkToken).send(data).end(function (err, res) {
       res.should.have.status(401);
       res.should.be.json;
-      res.body.should.be.a("object");
       res.body.should.have.property("status");
       res.body.status.should.equal(401);
       res.body.should.have.property("error");
@@ -128,7 +120,7 @@ describe("Post Trips endpoint", function () {
       token: "".concat(token)
     };
 
-    _chai["default"].request(_server["default"]).post("/api/v1/trips/createTrip", _middleware["default"].checkToken).send(data).end(function (err, res) {
+    _chai["default"].request(_server["default"]).post("/api/v1/trips", _middleware["default"].checkToken).send(data).end(function (err, res) {
       res.should.have.status(201);
       res.should.be.json;
       res.body.should.be.a("object");
@@ -163,12 +155,12 @@ describe("Post Trips endpoint Error handling", function () {
       token: "".concat(token)
     };
 
-    _chai["default"].request(_server["default"]).post("/api/v1/trips/createTrip", _middleware["default"].checkToken).send(data).end(function (err, res) {
+    _chai["default"].request(_server["default"]).post("/api/v1/trips", _middleware["default"].checkToken).send(data).end(function (err, res) {
       res.should.have.status(400);
       res.should.be.json;
       res.body.should.be.a("object");
       res.body.should.have.property("status");
-      res.body.status.should.equal('Error');
+      res.body.status.should.equal("Error");
       res.body.should.have.property("error");
     });
 
@@ -195,12 +187,12 @@ describe("Post Trips endpoint Error handling", function () {
       token: "".concat(token)
     };
 
-    _chai["default"].request(_server["default"]).post("/api/v1/trips/createTrip", _middleware["default"].checkToken).send(data).end(function (err, res) {
+    _chai["default"].request(_server["default"]).post("/api/v1/trips", _middleware["default"].checkToken).send(data).end(function (err, res) {
       res.should.have.status(400);
       res.should.be.json;
       res.body.should.be.a("object");
       res.body.should.have.property("status");
-      res.body.status.should.equal('Error');
+      res.body.status.should.equal("Error");
       res.body.should.have.property("error");
     });
 
@@ -227,12 +219,12 @@ describe("Post Trips endpoint Error handling", function () {
       token: "".concat(token)
     };
 
-    _chai["default"].request(_server["default"]).post("/api/v1/trips/createTrip", _middleware["default"].checkToken).send(data).end(function (err, res) {
+    _chai["default"].request(_server["default"]).post("/api/v1/trips", _middleware["default"].checkToken).send(data).end(function (err, res) {
       res.should.have.status(400);
       res.should.be.json;
       res.body.should.be.a("object");
       res.body.should.have.property("status");
-      res.body.status.should.equal('Error');
+      res.body.status.should.equal("Error");
       res.body.should.have.property("error");
     });
 
@@ -259,12 +251,12 @@ describe("Post Trips endpoint Error handling", function () {
       token: "".concat(token)
     };
 
-    _chai["default"].request(_server["default"]).post("/api/v1/trips/createTrip", _middleware["default"].checkToken).send(data).end(function (err, res) {
+    _chai["default"].request(_server["default"]).post("/api/v1/trips", _middleware["default"].checkToken).send(data).end(function (err, res) {
       res.should.have.status(400);
       res.should.be.json;
       res.body.should.be.a("object");
       res.body.should.have.property("status");
-      res.body.status.should.equal('Error');
+      res.body.status.should.equal("Error");
       res.body.should.have.property("error");
     });
 
@@ -291,19 +283,19 @@ describe("Post Trips endpoint Error handling", function () {
       token: "".concat(token)
     };
 
-    _chai["default"].request(_server["default"]).post("/api/v1/trips/createTrip", _middleware["default"].checkToken).send(data).end(function (err, res) {
+    _chai["default"].request(_server["default"]).post("/api/v1/trips", _middleware["default"].checkToken).send(data).end(function (err, res) {
       res.should.have.status(400);
       res.should.be.json;
       res.body.should.be.a("object");
       res.body.should.have.property("status");
-      res.body.status.should.equal('Error');
+      res.body.status.should.equal("Error");
       res.body.should.have.property("error");
     });
 
     done();
   });
   it("Should return an error if no token provided", function (done) {
-    _chai["default"].request(_server["default"]).post("/api/v1/trips/createTrip").end(function (err, res) {
+    _chai["default"].request(_server["default"]).post("/api/v1/trips").end(function (err, res) {
       res.should.have.status(401);
       res.should.be.json;
       res.body.should.be.a("object");
@@ -325,7 +317,7 @@ describe("Post Trips endpoint Error handling", function () {
       token: "fakeToken"
     };
 
-    _chai["default"].request(_server["default"]).post("/api/v1/trips/createTrip", _middleware["default"].checkToken).send(data).end(function (err, res) {
+    _chai["default"].request(_server["default"]).post("/api/v1/trips", _middleware["default"].checkToken).send(data).end(function (err, res) {
       res.should.have.status(401);
       res.should.be.json;
       res.body.should.be.a("object");

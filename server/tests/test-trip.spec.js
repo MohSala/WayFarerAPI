@@ -32,25 +32,19 @@ describe("Get Trips endpoint", () => {
     };
     const token = jwt.sign(user, "secretKey", { expiresIn: 3000 });
     const data = {
-      bus_id: "2",
-      origin: "Accre",
-      destination: "Lagos",
-      trip_date: "2019-01-01",
-      fare: "40000",
-      status: "1",
       token: `${token}`
     };
 
     chai
       .request(server)
-      .get("/api/v1/trips/getTrips", middleware.checkToken)
+      .get("/api/v1/trips", middleware.checkToken)
       .send(data)
       .end((err, res) => {
-        res.should.have.status(201);
+        res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.a("object");
         res.body.should.have.property("status");
-        res.body.status.should.equal(201);
+        res.body.status.should.equal(200);
         res.body.should.have.property("data");
         res.body.data.should.be.a("object");
       });
@@ -62,11 +56,10 @@ describe("Get trips Endpoint Error Handling", () => {
   it("should return an ERROR if Token is not supplied", done => {
     chai
       .request(server)
-      .get("/api/v1/trips/getTrips")
+      .get("/api/v1/trips")
       .end((err, res) => {
         res.should.have.status(401);
         res.should.be.json;
-        res.body.should.be.a("object");
         res.body.should.have.property("status");
         res.body.status.should.equal(401);
         res.body.should.have.property("error");
@@ -86,12 +79,11 @@ describe("Get trips Endpoint Error Handling", () => {
     };
     chai
       .request(server)
-      .get("/api/v1/trips/getTrips", middleware.checkToken)
+      .get("/api/v1/trips", middleware.checkToken)
       .send(data)
       .end((err, res) => {
         res.should.have.status(401);
         res.should.be.json;
-        res.body.should.be.a("object");
         res.body.should.have.property("status");
         res.body.status.should.equal(401);
         res.body.should.have.property("error");
@@ -126,7 +118,7 @@ describe("Post Trips endpoint", () => {
 
     chai
       .request(server)
-      .post("/api/v1/trips/createTrip", middleware.checkToken)
+      .post("/api/v1/trips", middleware.checkToken)
       .send(data)
       .end((err, res) => {
         res.should.have.status(201);
@@ -142,7 +134,6 @@ describe("Post Trips endpoint", () => {
 });
 
 describe("Post Trips endpoint Error handling", () => {
-  
   it("Should return an error if no bus Id provided", done => {
     const user = {
       first_name: "Tobi",
@@ -151,7 +142,7 @@ describe("Post Trips endpoint Error handling", () => {
     };
     const token = jwt.sign(user, "secretKey", { expiresIn: 3000 });
     const data = {
-    //   bus_id: "2",
+      //   bus_id: "2",
       origin: "Accre",
       destination: "Lagos",
       trip_date: "2019-01-01",
@@ -162,19 +153,18 @@ describe("Post Trips endpoint Error handling", () => {
 
     chai
       .request(server)
-      .post("/api/v1/trips/createTrip", middleware.checkToken)
+      .post("/api/v1/trips", middleware.checkToken)
       .send(data)
       .end((err, res) => {
         res.should.have.status(400);
         res.should.be.json;
         res.body.should.be.a("object");
         res.body.should.have.property("status");
-        res.body.status.should.equal('Error');
+        res.body.status.should.equal("Error");
         res.body.should.have.property("error");
       });
     done();
   });
-
 
   it("Should return an error if no origin provided", done => {
     const user = {
@@ -185,7 +175,7 @@ describe("Post Trips endpoint Error handling", () => {
     const token = jwt.sign(user, "secretKey", { expiresIn: 3000 });
     const data = {
       bus_id: "2",
-    //   origin: "Accre",
+      //   origin: "Accre",
       destination: "Lagos",
       trip_date: "2019-01-01",
       fare: "40000",
@@ -195,14 +185,14 @@ describe("Post Trips endpoint Error handling", () => {
 
     chai
       .request(server)
-      .post("/api/v1/trips/createTrip", middleware.checkToken)
+      .post("/api/v1/trips", middleware.checkToken)
       .send(data)
       .end((err, res) => {
         res.should.have.status(400);
         res.should.be.json;
         res.body.should.be.a("object");
         res.body.should.have.property("status");
-        res.body.status.should.equal('Error');
+        res.body.status.should.equal("Error");
         res.body.should.have.property("error");
       });
     done();
@@ -218,7 +208,7 @@ describe("Post Trips endpoint Error handling", () => {
     const data = {
       bus_id: "2",
       origin: "Accre",
-    //   destination: "Lagos",
+      //   destination: "Lagos",
       trip_date: "2019-01-01",
       fare: "40000",
       status: "1",
@@ -227,14 +217,14 @@ describe("Post Trips endpoint Error handling", () => {
 
     chai
       .request(server)
-      .post("/api/v1/trips/createTrip", middleware.checkToken)
+      .post("/api/v1/trips", middleware.checkToken)
       .send(data)
       .end((err, res) => {
         res.should.have.status(400);
         res.should.be.json;
         res.body.should.be.a("object");
         res.body.should.have.property("status");
-        res.body.status.should.equal('Error');
+        res.body.status.should.equal("Error");
         res.body.should.have.property("error");
       });
     done();
@@ -251,7 +241,7 @@ describe("Post Trips endpoint Error handling", () => {
       bus_id: "2",
       origin: "Accre",
       destination: "Lagos",
-    //   trip_date: "2019-01-01",
+      //   trip_date: "2019-01-01",
       fare: "40000",
       status: "1",
       token: `${token}`
@@ -259,14 +249,14 @@ describe("Post Trips endpoint Error handling", () => {
 
     chai
       .request(server)
-      .post("/api/v1/trips/createTrip", middleware.checkToken)
+      .post("/api/v1/trips", middleware.checkToken)
       .send(data)
       .end((err, res) => {
         res.should.have.status(400);
         res.should.be.json;
         res.body.should.be.a("object");
         res.body.should.have.property("status");
-        res.body.status.should.equal('Error');
+        res.body.status.should.equal("Error");
         res.body.should.have.property("error");
       });
     done();
@@ -284,32 +274,30 @@ describe("Post Trips endpoint Error handling", () => {
       origin: "Accre",
       destination: "Lagos",
       trip_date: "2019-01-01",
-    //   fare: "40000",
+      //   fare: "40000",
       status: "1",
       token: `${token}`
     };
 
     chai
       .request(server)
-      .post("/api/v1/trips/createTrip", middleware.checkToken)
+      .post("/api/v1/trips", middleware.checkToken)
       .send(data)
       .end((err, res) => {
         res.should.have.status(400);
         res.should.be.json;
         res.body.should.be.a("object");
         res.body.should.have.property("status");
-        res.body.status.should.equal('Error');
+        res.body.status.should.equal("Error");
         res.body.should.have.property("error");
       });
     done();
   });
 
   it("Should return an error if no token provided", done => {
-    
-
     chai
       .request(server)
-      .post("/api/v1/trips/createTrip")
+      .post("/api/v1/trips")
       .end((err, res) => {
         res.should.have.status(401);
         res.should.be.json;
@@ -333,7 +321,7 @@ describe("Post Trips endpoint Error handling", () => {
     };
     chai
       .request(server)
-      .post("/api/v1/trips/createTrip", middleware.checkToken)
+      .post("/api/v1/trips", middleware.checkToken)
       .send(data)
       .end((err, res) => {
         res.should.have.status(401);
