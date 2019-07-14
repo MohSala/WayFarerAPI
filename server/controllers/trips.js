@@ -85,29 +85,47 @@ class TripController {
     }
 
     pool.connect((err, client, done) => {
-      const query =
-        "INSERT INTO trips(bus_id,origin, destination, trip_date, fare,status) VALUES($1,$2,$3,$4,$5,$6) RETURNING *";
-      const values = [
-        data.bus_id,
-        data.origin,
-        data.destination,
-        data.trip_date,
-        data.fare,
-        data.status
-      ];
-
-      client.query(query, values, (error, result) => {
-        done();
+      const query = "SELECT is_admin FROM users where id =$1";
+      const value = [req.body.id];
+      client.query(query, value, (error, result) => {
         if (error) {
           res.status(400).json({
             status: "Error",
-            error: "Not all credentials filled"
+            error: "Something went wrong please try again"
           });
         }
-        res.status(201).send({
-          status: "Successful",
-          data: result.rows[0]
-        });
+
+        if (result.rows[0].is_admin === "true") {
+          const query =
+            "INSERT INTO trips(bus_id,origin, destination, trip_date, fare,status) VALUES($1,$2,$3,$4,$5,$6) RETURNING *";
+          const values = [
+            data.bus_id,
+            data.origin,
+            data.destination,
+            data.trip_date,
+            data.fare,
+            data.status
+          ];
+
+          client.query(query, values, (error, result) => {
+            done();
+            if (error) {
+              res.status(400).json({
+                status: "Error",
+                error: "Not all credentials filled"
+              });
+            }
+            res.status(201).send({
+              status: "Successful",
+              data: result.rows[0]
+            });
+          });
+        } else {
+          res.status(400).json({
+            status: "Error",
+            error: "Sorry only admin can make trips"
+          });
+        }
       });
     });
   }

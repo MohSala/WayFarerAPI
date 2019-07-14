@@ -7,7 +7,7 @@
     "dev": "nodemon --exec babel-node server/server.js",
     "test": "mocha build/tests --exit",
     "build": "babel server --out-dir build",
-    "create": "node db createTrips"
+    "create": "node db createBookings"
   },
   "repository": {
     "type": "git",
