@@ -14,9 +14,9 @@ class TripController {
       const query = "SELECT * FROM trips";
       client.query(query, (error, result) => {
         if (error) {
-          return res.status(401).json({
+          return res.status(400).json({
             status: "error",
-            error: "No token provided"
+            error: "Something went wrong"
           });
         }
         if (result.rows < 1) {
@@ -86,7 +86,7 @@ class TripController {
 
     pool.connect((err, client, done) => {
       const query = "SELECT is_admin FROM users where id =$1";
-      const value = [req.body.id];
+      const value = [req.body.user_id];
       client.query(query, value, (error, result) => {
         if (error) {
           res.status(400).json({
