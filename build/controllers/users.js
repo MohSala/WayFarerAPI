@@ -56,7 +56,7 @@ function () {
 
       if (user.first_name === undefined || user.first_name.trim() === "") {
         res.status(400).json({
-          status: 400,
+          status: "Error",
           error: "Firstname not supplied"
         });
         return;
@@ -64,7 +64,7 @@ function () {
 
       if (user.last_name === undefined || user.last_name.trim() === "") {
         res.status(400).json({
-          status: 400,
+          status: "Error",
           error: "Lastname not supplied"
         });
         return;
@@ -72,7 +72,7 @@ function () {
 
       if (user.email === undefined || user.email.trim() === "") {
         res.status(400).json({
-          status: 400,
+          status: "Error",
           error: "Email not supplied"
         });
         return;
@@ -80,7 +80,7 @@ function () {
 
       if (user.password === undefined || user.password.trim() === "") {
         res.status(400).json({
-          status: 400,
+          status: "Error",
           error: "Password not supplied"
         });
         return;
@@ -97,7 +97,10 @@ function () {
       if (validUser(user)) {
         pool.connect(function (err, client, done) {
           if (err) {
-            console.log(err);
+            res.status(400).json({
+              status: "Error",
+              error: "Something went wrong, please try again"
+            });
           }
 
           client.query("SELECT email FROM users", function (err, result) {
@@ -113,7 +116,7 @@ function () {
 
             if (newArr.includes(user.email)) {
               res.status(400).json({
-                status: 400,
+                status: "Error",
                 error: "Email already used"
               });
             } else {
@@ -144,7 +147,7 @@ function () {
                     console.log(result.rows);
                     console.log("New User created");
                     res.status(201).json({
-                      status: 201,
+                      status: "Success",
                       data: {
                         token: token,
                         id: user.id,
@@ -165,7 +168,7 @@ function () {
       } else {
         // send an error
         res.status(400).json({
-          status: 400,
+          status: "Error",
           error: "Password must be minimum of 6 characters"
         });
       }
@@ -184,7 +187,7 @@ function () {
 
       if (user.email === undefined || user.email === "") {
         res.status(400).json({
-          status: 400,
+          status: "Error",
           error: "Email not supplied"
         });
         return;
@@ -192,7 +195,7 @@ function () {
 
       if (user.password === undefined || user.password === "") {
         res.status(400).json({
-          status: 400,
+          status: "Error",
           error: "Password not supplied"
         });
         return;
@@ -213,7 +216,7 @@ function () {
 
           if (result.rows == 0) {
             res.status(400).json({
-              status: "Failure",
+              status: "Error",
               message: "No User Found"
             });
           } else {
@@ -230,12 +233,15 @@ function () {
                 }, function (err, token) {
                   res.status(200).send({
                     status: 200,
-                    data: "Bearer " + token
+                    data: {
+                      token: token,
+                      email: user.email
+                    }
                   });
                 });
               } else {
                 res.status(400).send({
-                  status: "Failure",
+                  status: "Error",
                   result: "Invalid Credentials"
                 });
               }

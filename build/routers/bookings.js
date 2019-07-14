@@ -9,12 +9,13 @@ exports["default"] = void 0;
 
 var _express = _interopRequireDefault(require("express"));
 
-var _trips = _interopRequireDefault(require("../controllers/trips"));
+var _bookings = _interopRequireDefault(require("../controllers/bookings"));
 
 var router = _express["default"].Router();
 
-router.get("/", _trips["default"].getTrips);
-router.post("/", _trips["default"].createTrip);
-router.patch("/:trip_id", _trips["default"].cancelTrip);
+router.post("/bookings", _bookings["default"].createBooking);
+router.get("/bookings", _bookings["default"].viewBookings);
+router["delete"]("/bookings/:booking_id", _bookings["default"].deleteBooking);
+router.patch("/bookings/:booking_id", _bookings["default"].changeSeat);
 var _default = router;
 exports["default"] = _default;
