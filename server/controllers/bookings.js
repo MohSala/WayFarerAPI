@@ -228,6 +228,40 @@ class BookingsController {
       });
     });
   }
+
+  static deleteBooking(req, res) {
+    pool.connect((err, client, done) => {
+      if (err) {
+        console.log(err);
+      }
+
+      const query =
+        "DELETE FROM bookings where user_id=$1 and booking_id=$2 returning *";
+
+      const val = [req.body.user_id, req.params.booking_id];
+      client.query(query, val, (error, result) => {
+        if (error) {
+          return res.status(400).json({
+            status: "Error",
+            error: "Sorry something went wrong"
+          });
+        }
+        if (!result.rows) {
+          res.status(400).json({
+            status: "Error",
+            message: "Not found"
+          });
+        }
+        return res.status(200).json({
+          status: "Success",
+          data: {
+            message: "Deleted Successfully"
+          }
+        });
+        done();
+      });
+    });
+  }
 }
 
 export default BookingsController;
