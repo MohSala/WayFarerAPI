@@ -17,6 +17,10 @@ var _middleware = _interopRequireDefault(require("./middleware"));
 
 var _trips = _interopRequireDefault(require("./routers/trips"));
 
+var _buses = _interopRequireDefault(require("./routers/buses"));
+
+var _bookings = _interopRequireDefault(require("./routers/bookings"));
+
 var app = (0, _express["default"])();
 
 var router = _express["default"].Router();
@@ -27,13 +31,15 @@ app.use(_bodyParser["default"].urlencoded({
 }));
 var port = process.env.PORT || 3001; // when a random route is inputed
 
-app.get('/', _middleware["default"].checkToken, function (req, res) {
+app.get("/", _middleware["default"].checkToken, function (req, res) {
   return res.status(200).send({
-    message: 'Welcome to this API.'
+    message: "Welcome to this API."
   });
 });
-app.use('/api/v1/auth/', _users["default"]);
-app.use('/api/v1/trips/', _middleware["default"].checkToken, _trips["default"]);
+app.use("/api/v1/auth/", _users["default"]);
+app.use("/api/v1/trips/", _middleware["default"].checkToken, _trips["default"]);
+app.use("/api/v1/", _middleware["default"].checkToken, _buses["default"]);
+app.use("/api/v1/", _middleware["default"].checkToken, _bookings["default"]);
 app.listen(port, function () {
   console.log("Server is running on PORT ".concat(port));
 });

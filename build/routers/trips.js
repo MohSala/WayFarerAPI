@@ -13,7 +13,8 @@ var _trips = _interopRequireDefault(require("../controllers/trips"));
 
 var router = _express["default"].Router();
 
-router.get('/getTrips', _trips["default"].getTrips);
-router.post('/createTrip', _trips["default"].createTrip);
+router.get("/", _trips["default"].getTrips);
+router.post("/", _trips["default"].createTrip);
+router.patch("/:trip_id", _trips["default"].cancelTrip);
 var _default = router;
 exports["default"] = _default;

@@ -14,9 +14,9 @@ class TripController {
       const query = "SELECT * FROM trips";
       client.query(query, (error, result) => {
         if (error) {
-          return res.status(401).json({
+          return res.status(400).json({
             status: "error",
-            error: "No token provided"
+            error: "Something went wrong"
           });
         }
         if (result.rows < 1) {
@@ -85,33 +85,91 @@ class TripController {
     }
 
     pool.connect((err, client, done) => {
-      const query =
-        "INSERT INTO trips(bus_id,origin, destination, trip_date, fare,status) VALUES($1,$2,$3,$4,$5,$6) RETURNING *";
-      const values = [
-        data.bus_id,
-        data.origin,
-        data.destination,
-        data.trip_date,
-        data.fare,
-        data.status
-      ];
-
-      client.query(query, values, (error, result) => {
-        done();
+      const query = "SELECT is_admin FROM users where id =$1";
+      const value = [req.body.user_id];
+      client.query(query, value, (error, result) => {
         if (error) {
-          res.status(400).json({ 
-            status: 'Error',  
-            error: "Not all credentials filled" 
-            });
+          res.status(400).json({
+            status: "Error",
+            error: "Something went wrong please try again"
+          });
         }
-        res.status(201).send({
-          status: "Successful",
-          data: result.rows[0]
-        });
+
+        if (result.rows[0].is_admin === "true") {
+          const query =
+            "INSERT INTO trips(bus_id,origin, destination, trip_date, fare,status) VALUES($1,$2,$3,$4,$5,$6) RETURNING *";
+          const values = [
+            data.bus_id,
+            data.origin,
+            data.destination,
+            data.trip_date,
+            data.fare,
+            data.status
+          ];
+
+          client.query(query, values, (error, result) => {
+            done();
+            if (error) {
+              res.status(400).json({
+                status: "Error",
+                error: "Not all credentials filled"
+              });
+            }
+            res.status(201).send({
+              status: "Successful",
+              data: result.rows[0]
+            });
+          });
+        } else {
+          res.status(400).json({
+            status: "Error",
+            error: "Sorry only admin can make trips"
+          });
+        }
       });
     });
   }
 
+  static cancelTrip(req, res) {
+    pool.connect((err, client, done) => {
+      const query = "SELECT is_admin from users where id=$1";
+      const values = [req.body.id];
+
+      client.query(query, values, (error, result) => {
+        if (error) {
+          res.status(400).json({
+            status: "Error",
+            error: "Something went wrong"
+          });
+        }
+
+        if (result.rows[0].is_admin === "true") {
+          const cancelQuery = `UPDATE trips
+          SET status=$1
+          WHERE id=$2 returning *`;
+          const val = ["0", req.params.trip_id];
+
+          client.query(cancelQuery, val, (error, result) => {
+            if (result.rows[0] <= 0) {
+              return res.status(404).json({
+                status: "error",
+                error: "No trip found with such ID"
+              });
+            }
+            return res.status(200).json({
+              status: "success",
+              data: result.rows[0]
+            });
+          });
+        } else {
+          res.status(400).json({
+            status: "error",
+            error: "You do not have the priviledges"
+          });
+        }
+      });
+    });
+  }
 }
 
 export default TripController;
