@@ -7,10 +7,9 @@
     "dev": "nodemon --exec babel-node server/server.js",
     "test": "mocha build/tests --exit",
     "build": "babel server --out-dir build",
-    "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
-    "coveralls-coverage": "coveralls < lcov.info",
-    "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
-    "coverage": "nyc npm test && npm run generate-lcov && npm run coveralls-coverage && npm run codeclimate-coverage",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test",
+    "showcoverage": " start ./coverage/index.html",
     "create": "node db createTables"
   },
   "repository": {
@@ -28,11 +27,15 @@
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "coveralls": "^3.0.5",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
+    "istanbul": "^0.4.5",
     "jsonwebtoken": "^8.5.1",
     "make-runnable": "^1.3.6",
     "mocha": "^6.1.4",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^14.1.1",
     "pg": "^7.11.0"
   },
   "devDependencies": {
