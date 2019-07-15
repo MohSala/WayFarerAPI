@@ -7,15 +7,11 @@
     "dev": "nodemon --exec babel-node server/server.js",
     "test": "mocha build/tests --exit",
     "build": "babel server --out-dir build",
-<<<<<<< HEAD
     "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
     "coveralls-coverage": "coveralls < lcov.info",
     "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
     "coverage": "nyc npm test && npm run generate-lcov && npm run coveralls-coverage && npm run codeclimate-coverage",
     "create": "node db createTrips"
-=======
-    "create": "node db createTables"
->>>>>>> 9eb180dfd303b3804f5cbb157475b7b44fe9a7d6
   },
   "repository": {
     "type": "git",
