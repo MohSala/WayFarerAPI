@@ -10,7 +10,8 @@ cache:
     - node_modules
 before_script:
   - npm install
-  - psql -c 'create database travis_ci_test;' -U wayfarer
+  - psql -c 'create database wayfarerdb;' -U postgres
+  - psql -c "CREATE USER wayfarer WITH PASSWORD 'wayfarer';" -U postgres
 script: 
   - npm run test
 after_success:
